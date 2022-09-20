@@ -34,7 +34,7 @@ def index():
 def student():
     if request.method == 'POST':
         answered = request.form.get("F_answer")
-        return render_template("answer.html", answer=answered, right_answer="right answer")
+        return render_template("answer.html", answer=answered, right_answer=answer)
     return render_template("student.html")
 
 
