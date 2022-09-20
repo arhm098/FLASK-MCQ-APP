@@ -9,7 +9,7 @@ app = Flask(__name__)
 def index():
     if request.method == 'POST':
         if request.form.get("F_student") == 'student':
-            return render_template('student.html')
+            return render_template('student.html',MCQ_HEADING = "This is the question that is being asked!",option_1="option 1",option_2="option 2",option_3="option 3",option_4="option 4")
         if request.form.get("F_teacher") == 'teacher':
             return render_template('teacher.html')
     return render_template("index.html");   
