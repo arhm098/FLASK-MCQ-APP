@@ -7,7 +7,15 @@
     <title>Document</title>
 </head>
 <body>
-    {{Answer}}
-    {{right_answer}}
+    <div>
+        <span>You clicked          : </span><p>{{answer}}</p>
+        <span>the right answer was : </span><p></p>{{right_answer}}</p>
+    </div>
+    {% if correct == 1 %}
+    <h1>You got the right answer!</h1>
+    {% endif %}
+    {% if correct == 0 %}
+        <h1>You got the wrong answer!</h1>
+    {% endif %}
 </body>
 </html>
