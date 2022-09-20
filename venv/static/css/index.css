@@ -1,4 +1,30 @@
-*{
-  font-size: 100px;
-  background-color: red;
+body{
+  background-color: rgb(20, 20, 20);
+  color: white;
+}
+section{
+  margin: 0% 10%;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(29 29 29);
+  border: solid 1px rgb(112, 255, 30);
+  border-radius: 2rem;
+}
+.options{
+  display: flex;
+  flex-direction: column;
+}
+.choice{
+  margin: 0.3rem 0rem;
+}
+
+#subBtn{
+  margin: 0.5rem 0;
+  width: 100%;
+  background-color: rgb(112, 255, 30) ;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-weight: bolder;
 }

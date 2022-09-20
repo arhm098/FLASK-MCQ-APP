@@ -2,20 +2,33 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/css/index.css">
     <title>Document</title>
   </head>
   <body>
-    <h3>{{MCQ_HEADING}}</h3>
     <form action="{{ url_for('student') }}" method="post">
-      <input type="radio" name="F_answer" id="Answer 1" value=1 />
-      <label for="Answer 1">{{option_1}}</label>
-      <input type="radio" name="F_answer" id="Answer 2" value=2 />
-      <label for="Answer 2">{{option_2}}</label>
-      <input type="radio" name="F_answer" id="Answer 3" value=3 />
-      <label for="Answer 3">{{option_3}}</label>
-      <input type="radio" name="F_answer" id="Answer 4" value=4 />
-      <label for="Answer 4">{{option_4}}</label>
-      <button type="submit">ENTER</button>
+      <section>
+        <h3>{{MCQ_HEADING}}</h3>
+        <div class="options">
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 1" value=1 />
+            <label for="Answer 1">{{option_1}}</label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 2" value=2 />
+            <label for="Answer 2">{{option_2}}</label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 3" value=3 />
+            <label for="Answer 3">{{option_3}}</label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 4" value=4 />
+            <label for="Answer 4">{{option_4}}</label>
+          </div>
+        </div>
+          <button id="subBtn" type="submit">ENTER</button>
+      </section>
     </form>
   </body>
 </html>
