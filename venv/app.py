@@ -34,16 +34,12 @@ def index():
 def student():
     if request.method == 'POST':
         answered = request.form.get("F_answer")
-        if answered == '1':
-            answered_c = option1
-        elif answered == '2':
-            answered_c = option2
-        elif answered == '3':
-            answered_c = option3
-        else:
-            answered_c = option4
-
-        return render_template("answer.html", answer=answered_c, right_answer=answer)
+        map = {'1':option1,'2':option2,'3':option3,'4':option4}
+        answered_c = map[answered]
+        correct = 0
+        if answered_c == answer:
+            correct = 1
+        return render_template("answer.html", answer=answered_c, right_answer=answer,correct=correct)
     return render_template("student.html")
 
 

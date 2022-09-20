@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-  </head>
-  <body>
-    {{answer}} {{right_answer}}
-  </body>
+</head>
+<body>
+    <div>
+        <span>You clicked          : </span><p>{{answer}}</p>
+        <span>the right answer was : </span><p></p>{{right_answer}}</p>
+    </div>
+    {% if correct == 1 %}
+    <h1>You got the right answer!</h1>
+    {% endif %}
+    {% if correct == 0 %}
+        <h1>You got the wrong answer!</h1>
+    {% endif %}
+</body>
 </html>
