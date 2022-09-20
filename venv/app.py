@@ -1,4 +1,6 @@
 
+from http.client import REQUEST_ENTITY_TOO_LARGE
+from pydoc import render_doc
 from flask import Flask ,render_template,request		
 
 
@@ -17,11 +19,13 @@ def index():
 @app.route("/student",methods = ['GET','POST'])
 def student():
     if request.method == 'POST':
-        return render_template("ans.html")
+        answered = request.form.get("F_answer")
+        return render_template("answer.html",answer = answered,right_answer="right answer")
     return render_template("student.html")
 
 @app.route("/teacher",methods = ['GET','POST'])
 def teacher():
     return render_template("teacher.html")
+
 if __name__ == "__main__":
     app.run(host ='0.0.0.0', port = 5000, debug = True) 
