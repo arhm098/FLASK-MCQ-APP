@@ -7,7 +7,7 @@ import sqlite3
 db = sqlite3.connect('../test.db')
 test = f"""SELECT * FROM QUIZ"""
 cursor = db.execute(test)
-
+MCQs = []
 for row in cursor:
 
     question = row[1]
@@ -16,6 +16,7 @@ for row in cursor:
     option3 = row[4]
     option4 = row[5]
     answer = row[6]
+    MCQs.append(row)
 
 app = Flask(__name__)
 
@@ -26,7 +27,7 @@ def index():
         if request.form.get("F_student") == 'student':
             return render_template('student.html',clicked = '0', MCQ_HEADING=question, option_1=option1, option_2=option2, option_3=option3, option_4=option4, right_option=answer)
         if request.form.get("F_teacher") == 'teacher':
-            return render_template('teacher.html')
+            return render_template('teacher.html',MCQ=row,pointer=1)
     return render_template("index.html")
 
 
@@ -45,7 +46,9 @@ def student():
 
 @app.route("/teacher", methods=['GET', 'POST'])
 def teacher():
-    return render_template("teacher.html")
+    if request.method == 'POST':
+        picked = request.form.get('F_choice')
+    return render_template("teacher.html",MCQ=row,pointer=1)
 
 
 if __name__ == "__main__":

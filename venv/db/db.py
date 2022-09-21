@@ -12,14 +12,17 @@ OPTION3 TEXT NOT NULL,
 OPTION4 TEXT NOT NULL,
 CORRECT_ANSWER TEXT NOT NULL)"""
 
-# db.execute(creation_query)
-# print("Tables Created!")
+db.execute(creation_query)
+print("Tables Created!")
 
-# insertion_query = f"""INSERT INTO QUIZ(ID,QUESTION,OPTION1,OPTION2,OPTION3,OPTION4,CORRECT_ANSWER)
-# VALUES('1','WHAT ARE THOSEEEE?', 'dEEZ','NUTS', 'Deex NUTS', 'JOE MAMA', 'Deex NUTS')"""
-# db.execute(insertion_query)
-# db.commit()
-# print("Values Entered!")
+insertion_query_1 = f"""INSERT INTO QUIZ VALUES('1','WHAT ARE THOSEEEE?', 'dEEZ','NUTS', 'Deex NUTS', 'JOE MAMA', 'Deex NUTS')"""
+insertion_query_2 = f"""INSERT INTO QUIZ VALUES('2','whos your daddy?', 'mum','dad', 'NUTS', 'JOE MAMA', 'mum')"""
+insertion_query_3 = f"""INSERT INTO QUIZ VALUES('3','whos your baby?', 'mum','dad', 'NUTS', 'JOE MAMA', 'NUTS')"""
+db.execute(insertion_query_1)
+db.execute(insertion_query_2)
+db.execute(insertion_query_3)
+db.commit()
+print("Values Entered!")
 
 test = f"""SELECT * FROM QUIZ"""
 cursor = db.execute(test)
