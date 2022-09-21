@@ -9,13 +9,6 @@ cursor = db.execute(test)
 MCQs = []
 picked = 0
 for row in cursor:
-
-    question = row[1]
-    option1 = row[2]
-    option2 = row[3]
-    option3 = row[4]
-    option4 = row[5]
-    answer = row[6]
     MCQs.append(row)
 
 app = Flask(__name__)
@@ -23,12 +16,12 @@ app = Flask(__name__)
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    file = open('./db/secretspecial.txt', 'r')
+    picked = file.read()
     print(picked)
     if request.method == 'POST':
         if request.form.get("F_student") == 'student':
-            print(picked)
-            print(MCQs[picked])
-            return render_template('student.html', clicked='0', MCQs=MCQs)
+            return render_template('student.html', clicked='0', MCQ=MCQs[int(picked)-1])
         if request.form.get("F_teacher") == 'teacher':
             return render_template('teacher.html', MCQs=MCQs)
     return render_template("index.html")
@@ -36,17 +29,19 @@ def index():
 
 @app.route("/student", methods=['GET', 'POST'])
 def student():
-    picked = open('./db/secretspecial.txt', 'r')
+    file = open('./db/secretspecial.txt', 'r')
+    picked = file.read()
+    print(picked)
     if request.method == 'POST':
         answered = request.form.get("F_answer")
-        map = {'1': MCQs[picked][2], '2': MCQs[picked][3],
-               '3': MCQs[picked][4], '4': MCQs[picked][5]}
+        map = {'1': MCQs[int(picked)-1][2], '2': MCQs[int(picked)-1][3],
+               '3': MCQs[int(picked)-1][4], '4': MCQs[int(picked)-1][5]}
         answered_c = map[answered]
         correct = 0
-        if answered_c == answer:
+        if answered_c == MCQs[int(picked)-1][6]:
             correct = 1
-        return render_template("student.html", clicked='1', MCQs=MCQs, correct=correct, answer=answered_c)
-    return render_template("student.html")
+        return render_template("student.html", clicked='1', MCQ=MCQs[int(picked)-1], correct=correct, answer=answered_c)
+    return render_template("student.html",clicked='0',MCQ=MCQs[int(picked)-1])
 
 
 @app.route("/teacher", methods=['GET', 'POST'])
