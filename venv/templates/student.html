@@ -6,6 +6,7 @@
     <title>Document</title>
   </head>
   <body>
+  {% if clicked == '0' %}
     <form action="{{ url_for('student') }}" method="post">
       <section>
         <h3>{{MCQ_HEADING}}</h3>
@@ -30,5 +31,42 @@
           <button id="subBtn" type="submit">ENTER</button>
       </section>
     </form>
+    {% endif %}
+    {% if clicked == '1' %}
+    <form action="{{ url_for('student') }}" method="post">
+      <section>
+        <h3>{{MCQ_HEADING}}</h3>
+        <div class="options">
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 1" value=1 disabled/>
+            <label for="Answer 1">{{option_1}}</label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 2" value=2 disabled/>
+            <label for="Answer 2">{{option_2}}</label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 3" value=3 disabled/>
+            <label for="Answer 3">{{option_3}}</label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 4" value=4 disabled/>
+            <label for="Answer 4">{{option_4}}</label>
+          </div>
+        </div>
+          <button id="subBtn" type="submit">ENTER</button>
+      </section>
+    </form>
+    <div>
+        <span>You clicked          : </span><p>{{answer}}</p>
+        <span>the right answer was : </span><p></p>{{right_answer}}</p>
+     </div>
+        {% if correct == 1 %}
+        <h1>You got the right answer!</h1>
+        {% endif %}
+        {% if correct == 0 %}
+            <h1>You got the wrong answer!</h1>
+        {% endif %}
+      {% endif %}
   </body>
 </html>
