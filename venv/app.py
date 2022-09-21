@@ -8,7 +8,6 @@ db = sqlite3.connect('../test.db')
 test = f"""SELECT * FROM QUIZ"""
 cursor = db.execute(test)
 MCQs = []
-global picked
 picked = 0
 for row in cursor:
 
@@ -22,6 +21,9 @@ for row in cursor:
 
 app = Flask(__name__)
 
+@app.context_processor
+def context_processor(picked):
+    return dict(option=picked)
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -30,7 +32,7 @@ def index():
         if request.form.get("F_student") == 'student':
             print(picked)
             print(MCQs[picked])
-            return render_template('student.html',clicked = '0',MCQ = MCQs[picked])
+            return render_template('student.html',clicked = '0',MCQs = MCQs)
         if request.form.get("F_teacher") == 'teacher':
             return render_template('teacher.html',MCQs=MCQs)
     return render_template("index.html")
@@ -45,7 +47,7 @@ def student():
         correct = 0
         if answered_c == answer:
             correct = 1
-        return render_template("student.html",clicked = '1',MCQ = MCQs[picked],correct = correct,answer = answered_c)
+        return render_template("student.html",clicked = '1',MCQs = MCQs,correct = correct,answer = answered_c)
     return render_template("student.html")
 
 
@@ -53,8 +55,8 @@ def student():
 def teacher():
     if request.method == 'POST': 
         picked = request.form.get('F_choice')
-        print(picked)
-        return render_template("index.html",picked=picked)
+        context_processor(picked)
+        return render_template("index.html")
     return render_template("teacher.html",MCQs=MCQs)
 
 
