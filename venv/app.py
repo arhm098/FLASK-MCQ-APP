@@ -8,6 +8,8 @@ db = sqlite3.connect('../test.db')
 test = f"""SELECT * FROM QUIZ"""
 cursor = db.execute(test)
 MCQs = []
+global picked
+picked = 0
 for row in cursor:
 
     question = row[1]
@@ -23,11 +25,14 @@ app = Flask(__name__)
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    print(picked)
     if request.method == 'POST':
         if request.form.get("F_student") == 'student':
-            return render_template('student.html',clicked = '0', MCQ_HEADING=question, option_1=option1, option_2=option2, option_3=option3, option_4=option4, right_option=answer)
+            print(picked)
+            print(MCQs[picked])
+            return render_template('student.html',clicked = '0',MCQ = MCQs[picked])
         if request.form.get("F_teacher") == 'teacher':
-            return render_template('teacher.html',MCQ=row,pointer=1)
+            return render_template('teacher.html',MCQs=MCQs)
     return render_template("index.html")
 
 
@@ -35,20 +40,22 @@ def index():
 def student():
     if request.method == 'POST':
         answered = request.form.get("F_answer")
-        map = {'1':option1,'2':option2,'3':option3,'4':option4}
+        map = {'1':MCQs[picked][2],'2':MCQs[picked][3],'3':MCQs[picked][4],'4':MCQs[picked][5]}
         answered_c = map[answered]
         correct = 0
         if answered_c == answer:
             correct = 1
-        return render_template("student.html",clicked = '1',MCQ_HEADING=question, option_1=option1, option_2=option2, option_3=option3, option_4=option4, right_option=answer, answer=answered_c, right_answer=answer,correct=correct)
+        return render_template("student.html",clicked = '1',MCQ = MCQs[picked],correct = correct,answer = answered_c)
     return render_template("student.html")
 
 
 @app.route("/teacher", methods=['GET', 'POST'])
 def teacher():
-    if request.method == 'POST':
+    if request.method == 'POST': 
         picked = request.form.get('F_choice')
-    return render_template("teacher.html",MCQ=row,pointer=1)
+        print(picked)
+        return render_template("index.html",picked=picked)
+    return render_template("teacher.html",MCQs=MCQs)
 
 
 if __name__ == "__main__":
