@@ -1,10 +1,10 @@
 import sqlite3
 
-db = sqlite3.connect('test.db')
+db = sqlite3.connect('../test.db')
 print("Database Connected Sucessfully!")
 
 creation_query = f"""CREATE TABLE QUIZ
-(ID PRIMARY KEY NOT NULL,
+(ID INTEGER PRIMARY KEY,
 QUESTION TEXT NOT NULL,
 OPTION1 TEXT NOT NULL,
 OPTION2 TEXT NOT NULL,
@@ -15,14 +15,22 @@ CORRECT_ANSWER TEXT NOT NULL)"""
 db.execute(creation_query)
 print("Tables Created!")
 
-insertion_query_1 = f"""INSERT INTO QUIZ VALUES('1','WHAT ARE THOSEEEE?', 'dEEZ','NUTS', 'Deex NUTS', 'JOE MAMA', 'Deex NUTS')"""
-insertion_query_2 = f"""INSERT INTO QUIZ VALUES('2','whos your daddy?', 'mum','dad', 'NUTS', 'JOE MAMA', 'mum')"""
-insertion_query_3 = f"""INSERT INTO QUIZ VALUES('3','whos your baby?', 'mum','dad', 'NUTS', 'JOE MAMA', 'NUTS')"""
-db.execute(insertion_query_1)
-db.execute(insertion_query_2)
-db.execute(insertion_query_3)
-db.commit()
-print("Values Entered!")
+
+insertion_query = f"""INSERT INTO QUIZ(QUESTION, OPTION1, OPTION2, OPTION3, OPTION4, CORRECT_ANSWER) 
+VALUES(?, ?, ?, ?, ?, ?)"""
+key = 'y'
+while key != 'n':
+    question = input("Enter Your Question: ")
+    option1 = input("Enter Option 1: ")
+    option2 = input("Enter Option 2: ")
+    option3 = input("Enter Option 3: ")
+    option4 = input("Enter Option 4: ")
+    correct = input("Enter Correct Answer: ")
+    db.execute(insertion_query, (question, option1,
+               option2, option3, option4, correct))
+    db.commit()
+    print("Values Entered!")
+    key = input("Do you want to add a new value(y/n)? ")
 
 test = f"""SELECT * FROM QUIZ"""
 cursor = db.execute(test)

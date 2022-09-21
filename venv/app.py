@@ -25,9 +25,9 @@ app = Flask(__name__)
 def index():
     if request.method == 'POST':
         if request.form.get("F_student") == 'student':
-            return render_template('student.html',clicked = '0', MCQ_HEADING=question, option_1=option1, option_2=option2, option_3=option3, option_4=option4, right_option=answer)
+            return render_template('student.html', clicked='0', MCQ_HEADING=question, option_1=option1, option_2=option2, option_3=option3, option_4=option4, right_option=answer)
         if request.form.get("F_teacher") == 'teacher':
-            return render_template('teacher.html',MCQ=row,pointer=1)
+            return render_template('teacher.html', MCQ=row, pointer=1)
     return render_template("index.html")
 
 
@@ -35,12 +35,12 @@ def index():
 def student():
     if request.method == 'POST':
         answered = request.form.get("F_answer")
-        map = {'1':option1,'2':option2,'3':option3,'4':option4}
+        map = {'1': option1, '2': option2, '3': option3, '4': option4}
         answered_c = map[answered]
         correct = 0
         if answered_c == answer:
             correct = 1
-        return render_template("student.html",clicked = '1',MCQ_HEADING=question, option_1=option1, option_2=option2, option_3=option3, option_4=option4, right_option=answer, answer=answered_c, right_answer=answer,correct=correct)
+        return render_template("student.html", clicked='1', MCQ_HEADING=question, option_1=option1, option_2=option2, option_3=option3, option_4=option4, right_option=answer, answer=answered_c, right_answer=answer, correct=correct)
     return render_template("student.html")
 
 
@@ -48,7 +48,7 @@ def student():
 def teacher():
     if request.method == 'POST':
         picked = request.form.get('F_choice')
-    return render_template("teacher.html",MCQ=row,pointer=1)
+    return render_template("teacher.html", MCQ=row, pointer=1)
 
 
 if __name__ == "__main__":
