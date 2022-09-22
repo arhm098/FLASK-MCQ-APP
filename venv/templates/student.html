@@ -13,19 +13,19 @@
         <div class="options">
           <div class="choice">
             <input type="radio" name="F_answer" id="Answer 1" value=1 />
-            <label for="Answer 1">{{MCQ[2]}}</label>
+            <label for="Answer 1"><img src={{MCQ[2]}} alt="not available"></label>
           </div>
           <div class="choice">
             <input type="radio" name="F_answer" id="Answer 2" value=2 />
-            <label for="Answer 2">{{MCQ[3]}}</label>
+            <label for="Answer 2"><img src={{MCQ[3]}} alt="not available"></label>
           </div>
           <div class="choice">
             <input type="radio" name="F_answer" id="Answer 3" value=3 />
-            <label for="Answer 3">{{MCQ[4]}}</label>
+            <label for="Answer 3"><img src={{MCQ[4]}} alt="not available"></label>
           </div>
           <div class="choice">
             <input type="radio" name="F_answer" id="Answer 4" value=4 />
-            <label for="Answer 4">{{MCQ[5]}}</label>
+            <label for="Answer 4"><img src={{MCQ[5]}} alt="not available"></label>
           </div>
         </div>
           <button id="subBtn" type="submit">ENTER</button>
@@ -39,27 +39,27 @@
         <div class="options">
           <div class="choice">
             <input type="radio" name="F_answer" id="Answer 1" value=1 disabled />
-            <label for="Answer 1">{{MCQ[2]}}</label>
+            <label for="Answer 1"><img src={{MCQ[2]}} alt="not available"></label>
           </div>
           <div class="choice">
             <input type="radio" name="F_answer" id="Answer 2" value=2 disabled />
-            <label for="Answer 2">{{MCQ[3]}}</label>
+            <label for="Answer 2"><img src={{MCQ[3]}} alt="not available"></label>
           </div>
           <div class="choice">
             <input type="radio" name="F_answer" id="Answer 3" value=3 disabled />
-            <label for="Answer 3">{{MCQ[4]}}</label>
+            <label for="Answer 3"><img src={{MCQ[4]}} alt="not available"></label>
           </div>
           <div class="choice">
             <input type="radio" name="F_answer" id="Answer 4" value=4 disabled />
-            <label for="Answer 4">{{MCQ[5]}}</label>
+            <label for="Answer 4"><img src={{MCQ[5]}} alt="not available"></label>
           </div>
         </div>
           <button id="subBtn" type="submit">ENTER</button>
       </section>
     </form>
     <div>
-        <span>You clicked          : </span><p>{{answer}}</p>
-        <span>the right answer was : </span><p></p>{{MCQ[6]}}</p>
+        <span>You clicked          : </span><img src={{answer}} alt="not available">
+        <span>the right answer was : </span><img src={{MCQ[6]}} alt="not available">
      </div>
         {% if correct == 1 %}
         <h1>You got the right answer!</h1>
