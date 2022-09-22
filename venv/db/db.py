@@ -1,6 +1,6 @@
 import sqlite3
 
-db = sqlite3.connect('../test.db')
+db = sqlite3.connect('./test.db')
 print("Database Connected Sucessfully!")
 
 # creation_query = f"""CREATE TABLE QUIZ

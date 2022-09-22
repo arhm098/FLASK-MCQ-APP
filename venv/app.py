@@ -3,7 +3,7 @@ from pydoc import render_doc
 from flask import Flask, render_template, request, redirect
 import sqlite3
 
-db = sqlite3.connect('../test.db')
+db = sqlite3.connect('./test.db')
 test = f"""SELECT * FROM QUIZ"""
 cursor = db.execute(test)
 MCQs = []
@@ -41,7 +41,7 @@ def student():
         if answered_c == MCQs[int(picked)-1][6]:
             correct = 1
         return render_template("student.html", clicked='1', MCQ=MCQs[int(picked)-1], correct=correct, answer=answered_c)
-    return render_template("student.html",clicked='0',MCQ=MCQs[int(picked)-1])
+    return render_template("student.html", clicked='0', MCQ=MCQs[int(picked)-1])
 
 
 @app.route("/teacher", methods=['GET', 'POST'])
