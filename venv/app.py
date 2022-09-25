@@ -23,9 +23,8 @@ def index():
         if request.form.get("F_student") == 'student':
             return render_template('student.html', clicked='0', MCQ=MCQs[int(picked)-1])
         if request.form.get("F_teacher") == 'teacher':
-            return render_template('teacher.html', MCQs=MCQs)
+            return render_template('password.html', MCQs=MCQs)
     return render_template("index.html")
-
 
 @app.route("/student", methods=['GET', 'POST'])
 def student():
@@ -46,13 +45,47 @@ def student():
 
 @app.route("/teacher", methods=['GET', 'POST'])
 def teacher():
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form.get("F_changepassword") == "newPassword":
+        return render_template("change_password.html",changed = 0)
+    elif request.method == 'POST':
         picked = request.form.get('F_choice')
         file = open('./db/secretspecial.txt', 'w')
         file.write(picked)
         return redirect('/')
     return render_template("teacher.html", MCQs=MCQs)
 
+@app.route("/password", methods=['GET', 'POST'])
+def password():
+    if request.method == 'POST':
+        password_out = request.form.get("F_password")
+        file = open('./db/SUPERSPECIALHASHKEY.txt', 'r')
+        pasword = file.read()
+        if password_out == pasword:
+            return render_template("teacher.html",MCQs=MCQs)
+        else:
+            return render_template("wrong_password.html")
+
+@app.route("/wrong_password",methods=['GET','POST'])
+def wrong_password():
+    if request.method == 'POST':
+        return redirect('/')
+    return render_template("wrong_password.html")
+
+@app.route("/change_password",methods=['GET','POST'])
+def change_password():
+    if request.method == 'POST':
+        current_password = request.form.get("f_current_password")
+        file = open('./db/SUPERSPECIALHASHKEY.txt', 'r')
+        password = file.read()
+        if current_password == password:
+            new_password = request.form.get("F_new_password")
+            file.close()
+            file = open('./db/SUPERSPECIALHASHKEY.txt', 'w')
+            file.write(new_password)
+            return render_template("change_password",changed = 1)
+        else:
+            return redirect('/wrong_password')
+    return render_template("change_password.html",changed = 0)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
