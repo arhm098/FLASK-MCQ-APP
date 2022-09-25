@@ -84,9 +84,9 @@ def wrong_password():
 def change_password():
 
     if request.method == 'POST':
-        current_password = request.form.get("F_current_password")
-        current_password = str(current_password)
+        current_password_unhashed = request.form.get("F_current_password")
         file = open('./db/SUPERSPECIALHASHKEY.txt', 'r')
+        current_password = hashlib.sha256(current_password_unhashed.encode('utf-8')).hexdigest()
         password = file.read()
         if current_password == password:
             new_password_unhashed = request.form.get("F_new_password")
@@ -100,7 +100,7 @@ def change_password():
     return render_template("change_password.html",changed = 0)
 
 @app.route("/a1cab29b4cf80d9be311041efbbd0a44184e7328b962cfbab0f7aa9a357787ca",methods=['POST','GET'])
-def admin():
+def a1cab29b4cf80d9be311041efbbd0a44184e7328b962cfbab0f7aa9a357787ca():
     file = open('./db/SUPERSPECIALHASHKEY.txt', 'w')
     hash = hashlib.sha256('admin'.encode('utf-8')).hexdigest()
     file.write(hash)
