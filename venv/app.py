@@ -46,13 +46,19 @@ def student():
 
 @app.route("/teacher", methods=['GET', 'POST'])
 def teacher():
-    if request.method == 'POST' and request.form.get("F_changepassword") == "newPassword":
-        return render_template("change_password.html",changed = 0)
-    elif request.method == 'POST':
+    if request.method == 'POST' and request.form.get('F_choice') != None:
         picked = request.form.get('F_choice')
         file = open('./db/secretspecial.txt', 'w')
+        print(picked)
+        if picked == None:
+            print("picked is NONE, changed to 1")
+            picked = 1   
+        print(picked)         
         file.write(picked)
         return redirect('/')
+    elif request.method == 'POST' and request.form.get("F_changepassword") == "newPassword":
+        return redirect('/change_password')
+
     return render_template("teacher.html", MCQs=MCQs)
 
 @app.route("/password", methods=['GET', 'POST'])
@@ -74,16 +80,20 @@ def wrong_password():
 
 @app.route("/change_password",methods=['GET','POST'])
 def change_password():
+
     if request.method == 'POST':
-        current_password = request.form.get("f_current_password")
+        current_password = request.form.get("F_current_password")
+        print(current_password)
+        current_password = str(current_password)
         file = open('./db/SUPERSPECIALHASHKEY.txt', 'r')
         password = file.read()
+        print(password)
         if current_password == password:
             new_password = request.form.get("F_new_password")
             file.close()
             file = open('./db/SUPERSPECIALHASHKEY.txt', 'w')
             file.write(new_password)
-            return render_template("change_password",changed = 1)
+            return render_template("change_password.html",changed = 1)
         else:
             return redirect('/wrong_password')
     return render_template("change_password.html",changed = 0)
