@@ -1,6 +1,10 @@
 import sqlite3
+import os
 
-db = sqlite3.connect('./test.db')
+os.chdir('../')
+
+
+db = sqlite3.connect(os.getcwd()+'/test.db')
 print("Database Connected Sucessfully!")
 
 # creation_query = f"""CREATE TABLE QUIZ
@@ -21,11 +25,18 @@ VALUES(?, ?, ?, ?, ?, ?)"""
 key = 'y'
 while key != 'n':
     question = input("Enter Your Question: ")
+    check = input("Are you adding local images?(y/n)")
     option1 = input("Enter Option 1: ")
     option2 = input("Enter Option 2: ")
     option3 = input("Enter Option 3: ")
     option4 = input("Enter Option 4: ")
     correct = input("Enter Correct Answer: ")
+    if check == 'y':
+        option1 = "../static/img/"+option1
+        option2 = "../static/img/"+option2
+        option3 = "../static/img/"+option3
+        option4 = "../static/img/"+option4
+        correct = "../static/img/"+correct
     db.execute(insertion_query, (question, option1,
                option2, option3, option4, correct))
     db.commit()
