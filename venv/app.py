@@ -3,6 +3,7 @@ from pydoc import render_doc
 from flask import Flask, render_template, request, redirect
 import sqlite3
 
+
 db = sqlite3.connect('./test.db')
 test = f"""SELECT * FROM QUIZ"""
 cursor = db.execute(test)
