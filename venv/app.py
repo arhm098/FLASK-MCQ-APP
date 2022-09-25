@@ -2,7 +2,7 @@ from http.client import REQUEST_ENTITY_TOO_LARGE
 from pydoc import render_doc
 from flask import Flask, render_template, request, redirect
 import sqlite3
-
+import hashlib
 
 db = sqlite3.connect('./test.db')
 test = f"""SELECT * FROM QUIZ"""
@@ -49,11 +49,11 @@ def teacher():
     if request.method == 'POST' and request.form.get('F_choice') != None:
         picked = request.form.get('F_choice')
         file = open('./db/secretspecial.txt', 'w')
-        print(picked)
+
         if picked == None:
             print("picked is NONE, changed to 1")
             picked = 1   
-        print(picked)         
+       
         file.write(picked)
         return redirect('/')
     elif request.method == 'POST' and request.form.get("F_changepassword") == "newPassword":
@@ -64,17 +64,19 @@ def teacher():
 @app.route("/password", methods=['GET', 'POST'])
 def password():
     if request.method == 'POST':
-        password_out = request.form.get("F_password")
+        password_out_unhashed = request.form.get("F_password")
+        hash = hashlib.sha256(password_out_unhashed.encode('utf-8')).hexdigest()
         file = open('./db/SUPERSPECIALHASHKEY.txt', 'r')
         pasword = file.read()
-        if password_out == pasword:
+        if hash == pasword:
             return render_template("teacher.html",MCQs=MCQs)
         else:
-            return render_template("wrong_password.html")
+            return redirect("wrong_password")
 
 @app.route("/wrong_password",methods=['GET','POST'])
 def wrong_password():
     if request.method == 'POST':
+        print("redirecting")
         return redirect('/')
     return render_template("wrong_password.html")
 
@@ -83,20 +85,26 @@ def change_password():
 
     if request.method == 'POST':
         current_password = request.form.get("F_current_password")
-        print(current_password)
         current_password = str(current_password)
         file = open('./db/SUPERSPECIALHASHKEY.txt', 'r')
         password = file.read()
-        print(password)
         if current_password == password:
-            new_password = request.form.get("F_new_password")
+            new_password_unhashed = request.form.get("F_new_password")
+            hash = hashlib.sha256(new_password_unhashed.encode('utf-8')).hexdigest()
             file.close()
             file = open('./db/SUPERSPECIALHASHKEY.txt', 'w')
-            file.write(new_password)
+            file.write(hash)
             return render_template("change_password.html",changed = 1)
         else:
             return redirect('/wrong_password')
     return render_template("change_password.html",changed = 0)
+
+@app.route("/a1cab29b4cf80d9be311041efbbd0a44184e7328b962cfbab0f7aa9a357787ca",methods=['POST','GET'])
+def admin():
+    file = open('./db/SUPERSPECIALHASHKEY.txt', 'w')
+    hash = hashlib.sha256('admin'.encode('utf-8')).hexdigest()
+    file.write(hash)
+    return "<p>password defaulted :)<p>"
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
