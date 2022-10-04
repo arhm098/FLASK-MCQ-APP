@@ -19,7 +19,7 @@ print("Database Connected Sucessfully!")
 # db.execute(creation_query)
 # print("Tables Created!")
 
-
+path = "../static/img/"
 insertion_query = f"""INSERT INTO QUIZ(QUESTION, OPTION1, OPTION2, OPTION3, OPTION4, CORRECT_ANSWER) 
 VALUES(?, ?, ?, ?, ?, ?)"""
 key = 'y'
@@ -32,11 +32,11 @@ while key != 'n':
     option4 = input("Enter Option 4: ")
     correct = input("Enter Correct Answer: ")
     if check == 'y':
-        option1 = "../static/img/"+option1
-        option2 = "../static/img/"+option2
-        option3 = "../static/img/"+option3
-        option4 = "../static/img/"+option4
-        correct = "../static/img/"+correct
+        option1 = +option1
+        option2 = path+option2
+        option3 = path+option3
+        option4 = path+option4
+        correct = path+correct
     db.execute(insertion_query, (question, option1,
                option2, option3, option4, correct))
     db.commit()

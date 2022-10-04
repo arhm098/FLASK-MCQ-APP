@@ -1,3 +1,4 @@
+
 from http.client import REQUEST_ENTITY_TOO_LARGE
 from pydoc import render_doc
 from flask import Flask, render_template, request, redirect
@@ -14,12 +15,28 @@ for row in cursor:
 
 app = Flask(__name__)
 
+def updateCount(choice):
+    file1 = open('./db/answers.txt', 'r')
+    image = file1.readlines()
+    count = image[choice]
+    image[choice] = str(int(count)+1)
+    image[choice] += '\n'
+    file1 = open('./db/answers.txt', 'w')
+    file1.writelines(image)
+def resetCount():
+    file1 = open('./db/answers.txt', 'r')
+    image = file1.readlines()
+    for i in range(4):
+        image[i] = '0\n'
+    file1 = open('./db/answers.txt', 'w')
+    file1.writelines(image)
+
+
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
     file = open('./db/secretspecial.txt', 'r')
     picked = file.read()
-    print(picked)
     if request.method == 'POST':
         if request.form.get("F_student") == 'student':
             return render_template('student.html', clicked='0', MCQ=MCQs[int(picked)-1])
@@ -40,6 +57,7 @@ def student():
         correct = 0
         if answered_c == MCQs[int(picked)-1][6]:
             correct = 1
+        updateCount(int(answered)-1)
         return render_template("student.html", clicked='1', MCQ=MCQs[int(picked)-1], correct=correct, answer=answered_c)
     return render_template("student.html", clicked='0', MCQ=MCQs[int(picked)-1])
 
@@ -51,11 +69,12 @@ def teacher():
         file = open('./db/secretspecial.txt', 'w')
 
         if picked == None:
-            print("picked is NONE, changed to 1")
             picked = 1   
        
         file.write(picked)
+        resetCount()
         return redirect('/')
+        
     elif request.method == 'POST' and request.form.get("F_changepassword") == "newPassword":
         return redirect('/change_password')
 
@@ -106,5 +125,12 @@ def a1cab29b4cf80d9be311041efbbd0a44184e7328b962cfbab0f7aa9a357787ca():
     file.write(hash)
     return "<p>password defaulted :)<p>"
 
+    
+@app.route("/projector")
+def projector():
+    file = open('./db/answers.txt','r')
+    return render_template("projector.html",list_ans=file.readlines())
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
+
