@@ -37,18 +37,24 @@ def resetCount():
 def index():
     file = open('./db/secretspecial.txt', 'r')
     picked = file.read()
+<<<<<<< Updated upstream
     if request.method == 'POST':
         if request.form.get("F_student") == 'student':
             return render_template('student.html', clicked='0', MCQ=MCQs[int(picked)-1])
         if request.form.get("F_teacher") == 'teacher':
             return render_template('password.html', MCQs=MCQs)
     return render_template("index.html")
+=======
+    file.close()
+    clicked = '1'
+    ips = open('./db/ip.txt', 'r')
+    banned_ips = ips.read()
+    print(banned_ips)
 
-@app.route("/student", methods=['GET', 'POST'])
-def student():
-    file = open('./db/secretspecial.txt', 'r')
-    picked = file.read()
-    print(picked)
+    if request.remote_addr not in banned_ips:
+        clicked= '0'
+>>>>>>> Stashed changes
+
     if request.method == 'POST':
         answered = request.form.get("F_answer")
         map = {'1': MCQs[int(picked)-1][2], '2': MCQs[int(picked)-1][3],
@@ -58,26 +64,30 @@ def student():
         if answered_c == MCQs[int(picked)-1][6]:
             correct = 1
         updateCount(int(answered)-1)
-        return render_template("student.html", clicked='1', MCQ=MCQs[int(picked)-1], correct=correct, answer=answered_c)
-    return render_template("student.html", clicked='0', MCQ=MCQs[int(picked)-1])
+        #ip banning
+        ip_address = request.remote_addr
+        ips = open('./db/ip.txt', 'a')
+        ips.write(ip_address+'\n')
+        ips.close()
+        #######
+        return render_template("index.html", clicked='1', MCQ=MCQs[int(picked)-1], correct=correct, answer=answered_c)
+    return render_template("index.html", clicked=clicked, MCQ=MCQs[int(picked)-1])
+
 
 
 @app.route("/teacher", methods=['GET', 'POST'])
 def teacher():
     if request.method == 'POST' and request.form.get('F_choice') != None:
         picked = request.form.get('F_choice')
-        file = open('./db/secretspecial.txt', 'w')
-
-        if picked == None:
-            picked = 1   
-       
+        file = open('./db/secretspecial.txt', 'w')  
         file.write(picked)
+        file.close()
         resetCount()
+        with open("ip.txt",'r+') as file:
+            file.truncate(0)
         return redirect('/')
-        
     elif request.method == 'POST' and request.form.get("F_changepassword") == "newPassword":
         return redirect('/change_password')
-
     return render_template("teacher.html", MCQs=MCQs)
 
 @app.route("/password", methods=['GET', 'POST'])
@@ -91,6 +101,7 @@ def password():
             return render_template("teacher.html",MCQs=MCQs)
         else:
             return redirect("wrong_password")
+    return render_template("password.html")
 
 @app.route("/wrong_password",methods=['GET','POST'])
 def wrong_password():
@@ -130,6 +141,10 @@ def a1cab29b4cf80d9be311041efbbd0a44184e7328b962cfbab0f7aa9a357787ca():
 def projector():
     file = open('./db/answers.txt','r')
     return render_template("projector.html",list_ans=file.readlines())
+
+@app.route("/admin",methods=['POST','GET'])
+def admin():
+    return redirect('/password')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
