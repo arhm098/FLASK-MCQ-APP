@@ -4,7 +4,6 @@ from pydoc import render_doc
 from flask import Flask, render_template, request, redirect
 import sqlite3
 import hashlib
-
 db = sqlite3.connect('./test.db')
 test = f"""SELECT * FROM QUIZ"""
 cursor = db.execute(test)
@@ -36,13 +35,14 @@ def resetCount():
 @app.route("/", methods=['GET', 'POST'])
 def index():
     file = open('./db/secretspecial.txt', 'r')
+    ip_address = request.remote_addr
     picked = file.read()
-    if request.method == 'POST':
-        if request.form.get("F_student") == 'student':
-            return render_template('student.html', clicked='0', MCQ=MCQs[int(picked)-1])
-        if request.form.get("F_teacher") == 'teacher':
-            return render_template('password.html', MCQs=MCQs)
-    return render_template("index.html")
+    if request.method == 'GET':
+        return render_template('student.html', clicked='0', MCQ=MCQs[int(picked)-1])
+
+@app.route("/admin",methods=['POST','GET'])
+def admin():
+    return redirect('/teacher')
 
 @app.route("/student", methods=['GET', 'POST'])
 def student():

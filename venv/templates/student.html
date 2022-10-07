@@ -9,7 +9,7 @@
   {% if clicked == '0' %}
     <form action="{{ url_for('student') }}" method="post">
       <section>
-        <h3>{{MCQ[1]}}</h3>
+        <h3><img src={{MCQ[1]}} alt="not available"></h3>
         <div class="options">
           <div class="choice">
             <input type="radio" name="F_answer" id="Answer 1" value=1 />
@@ -35,7 +35,7 @@
     {% if clicked == '1' %}
     <form action="{{ url_for('student') }}" method="post">
       <section>
-        <h3>{{MCQ[1]}}</h3>
+        <h3><img src={{MCQ[1]}} alt="not available"></h3>
         <div class="options">
           <div class="choice">
             <input type="radio" name="F_answer" id="Answer 1" value=1 disabled />
