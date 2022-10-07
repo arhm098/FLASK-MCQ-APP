@@ -37,14 +37,6 @@ def resetCount():
 def index():
     file = open('./db/secretspecial.txt', 'r')
     picked = file.read()
-<<<<<<< Updated upstream
-    if request.method == 'POST':
-        if request.form.get("F_student") == 'student':
-            return render_template('student.html', clicked='0', MCQ=MCQs[int(picked)-1])
-        if request.form.get("F_teacher") == 'teacher':
-            return render_template('password.html', MCQs=MCQs)
-    return render_template("index.html")
-=======
     file.close()
     clicked = '1'
     ips = open('./db/ip.txt', 'r')
@@ -53,7 +45,6 @@ def index():
 
     if request.remote_addr not in banned_ips:
         clicked= '0'
->>>>>>> Stashed changes
 
     if request.method == 'POST':
         answered = request.form.get("F_answer")

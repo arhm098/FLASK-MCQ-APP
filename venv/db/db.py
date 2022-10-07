@@ -32,7 +32,7 @@ while key != 'n':
     option4 = input("Enter Option 4: ")
     correct = input("Enter Correct Answer: ")
     if check == 'y':
-        option1 = +option1
+        option1 = path+option1
         option2 = path+option2
         option3 = path+option3
         option4 = path+option4
