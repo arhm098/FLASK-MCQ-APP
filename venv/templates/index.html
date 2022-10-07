@@ -1,15 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MCQ CLICKER APP</title>
+    <link rel="stylesheet" href="../static/css/index.css">
+    <title>student</title>
   </head>
   <body>
-    <form method="post">
-      <input type="submit" name="F_student" value="student" />
-      <input type="submit" name="F_teacher" value="teacher" />
+  {% if clicked == '0' %}
+    <form action="{{ url_for('index') }}" method="post">
+      <section>
+        <h3><img src={{MCQ[1]}} alt="not available"></h3>
+        <div class="options">
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 1" value=1 />
+            <label for="Answer 1"><img src={{MCQ[2]}} alt="not available"></label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 2" value=2 />
+            <label for="Answer 2"><img src={{MCQ[3]}} alt="not available"></label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 3" value=3 />
+            <label for="Answer 3"><img src={{MCQ[4]}} alt="not available"></label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 4" value=4 />
+            <label for="Answer 4"><img src={{MCQ[5]}} alt="not available"></label>
+          </div>
+        </div>
+          <button id="subBtn" type="submit">ENTER</button>
+      </section>
     </form>
+    {% endif %}
+    {% if clicked == '1' %}
+    <form action="{{ url_for('index') }}" method="post">
+      <section>
+        <h3><img src={{MCQ[1]}} alt="not available"></h3>
+        <div class="options">
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 1" value=1 disabled />
+            <label for="Answer 1"><img src={{MCQ[2]}} alt="not available"></label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 2" value=2 disabled />
+            <label for="Answer 2"><img src={{MCQ[3]}} alt="not available"></label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 3" value=3 disabled />
+            <label for="Answer 3"><img src={{MCQ[4]}} alt="not available"></label>
+          </div>
+          <div class="choice">
+            <input type="radio" name="F_answer" id="Answer 4" value=4 disabled />
+            <label for="Answer 4"><img src={{MCQ[5]}} alt="not available"></label>
+          </div>
+        </div>
+          <button id="subBtn" type="submit">ENTER</button>
+      </section>
+    </form>
+    <div>
+        <span>You clicked          : </span><img src={{answer}} alt="not available">
+        <span>the right answer was : </span><img src={{MCQ[6]}} alt="not available">
+     </div>
+        {% if correct == 1 %}
+        <h1>You got the right answer!</h1>
+        {% endif %}
+        {% if correct == 0 %}
+            <h1>You got the wrong answer!</h1>
+        {% endif %}
+      {% endif %}
   </body>
 </html>
