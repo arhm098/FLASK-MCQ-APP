@@ -1,15 +1,16 @@
 body{
-  background-color: rgb(20, 20, 20);
-  color: white;
+  background-color: rgb(196, 196, 196);
+  color: rgb(0, 0, 0);
 }
 section{
   margin: 0% 10%;
   padding: 2.5rem;
   display: flex;
   flex-direction: column;
-  background-color: rgb(29 29 29);
-  border: solid 1px rgb(112, 255, 30);
+  background-color: rgb(255, 255, 255);
+  border: solid 1px rgb(102, 102, 102);
   border-radius: 2rem;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 .options{
   display: flex;
@@ -17,12 +18,29 @@ section{
 }
 .choice{
   margin: 0.3rem 0rem;
+  background-color: rgb(255, 255, 255); 
+  transition: 0.1s;
 }
-
+.choice:hover{
+  margin: 0.3rem 0rem;
+  background-color: rgb(199, 199, 199); 
+  transition: 0.1s;
+}
 #subBtn{
   margin: 0.5rem 0;
   width: 100%;
-  background-color: rgb(112, 255, 30) ;
+  background-color: rgb(109, 109, 109) ;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-weight: bolder;
+  transition: 0.5s;
+}
+#subBtn:hover{
+  margin: 0.5rem 0;
+  width: 100%;
+  color:rgb(255, 255, 255);
+  background-color: rgb(0, 0, 0) ;
   border: none;
   border-radius: 5px;
   padding: 10px;
