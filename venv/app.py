@@ -5,13 +5,14 @@ from flask import Flask, render_template, request, redirect
 import sqlite3
 import hashlib
 
-db = sqlite3.connect('./test.db')
+db = sqlite3.connect('./db/test.db')
 test = f"""SELECT * FROM QUIZ"""
 cursor = db.execute(test)
 MCQs = []
 picked = 0
 for row in cursor:
     MCQs.append(row)
+    print(row)
 
 app = Flask(__name__)
 

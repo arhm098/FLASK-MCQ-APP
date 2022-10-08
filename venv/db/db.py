@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-os.chdir('../')
+os.chdir('./')
 
 
 db = sqlite3.connect(os.getcwd()+'/test.db')
@@ -19,24 +19,16 @@ print("Database Connected Sucessfully!")
 # db.execute(creation_query)
 # print("Tables Created!")
 
-path = "../static/img/"
 insertion_query = f"""INSERT INTO QUIZ(QUESTION, OPTION1, OPTION2, OPTION3, OPTION4, CORRECT_ANSWER) 
 VALUES(?, ?, ?, ?, ?, ?)"""
 key = 'y'
 while key != 'n':
     question = input("Enter Your Question: ")
-    check = input("Are you adding local images?(y/n)")
     option1 = input("Enter Option 1: ")
     option2 = input("Enter Option 2: ")
     option3 = input("Enter Option 3: ")
     option4 = input("Enter Option 4: ")
     correct = input("Enter Correct Answer: ")
-    if check == 'y':
-        option1 = path+option1
-        option2 = path+option2
-        option3 = path+option3
-        option4 = path+option4
-        correct = path+correct
     db.execute(insertion_query, (question, option1,
                option2, option3, option4, correct))
     db.commit()
@@ -45,12 +37,3 @@ while key != 'n':
 
 test = f"""SELECT * FROM QUIZ"""
 cursor = db.execute(test)
-
-for row in cursor:
-    print(row[0])
-    print(row[1])
-    print(row[2])
-    print(row[3])
-    print(row[4])
-    print(row[5])
-    print(row[6])
