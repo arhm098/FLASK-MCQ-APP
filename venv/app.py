@@ -44,6 +44,14 @@ def getActive():
     return picked
 
 
+def getCount():
+    query = f"""SELECT * FROM COUNT;"""
+    cursor = db.execute(query)
+    for row in cursor:
+        count = row
+    return count
+
+
 def updateCount(choice):
     query = f"""UPDATE COUNT
     SET OPTION{choice} = OPTION{choice} + 1;
@@ -63,13 +71,33 @@ def resetCount():
     db.commit()
 
 
+def addIP(ip):
+    query = f"""INSERT INTO BANNED_IP(IP)
+    VALUES(?);"""
+    db.execute(query, (ip,))
+    db.commit()
+
+
+def resetIP():
+    query = f"""DELETE FROM BANNED_IP;"""
+    db.execute(query)
+    db.commit()
+
+
+def getIP():
+    query = f"""SELECT * FROM BANNED_IP;"""
+    cursor = db.execute(query)
+    ips = []
+    for row in cursor:
+        ips.append(row[0])
+    return ips
+
+
 @app.route("/", methods=['GET', 'POST'])
 def index():
     picked = getActive()
     clicked = '1'
-    ips = open('./db/ip.txt', 'r')
-    banned_ips = ips.read()
-    print(banned_ips)
+    banned_ips = getIP()
 
     if request.remote_addr not in banned_ips:
         clicked = '0'
@@ -85,9 +113,7 @@ def index():
         updateCount(int(answered))
         # ip banning
         ip_address = request.remote_addr
-        ips = open('./db/ip.txt', 'a')
-        ips.write(ip_address+'\n')
-        ips.close()
+        addIP(ip_address)
         #######
         return render_template("index.html", clicked='1', MCQ=MCQs[int(picked)-1], correct=correct, answer=answered_c)
     return render_template("index.html", clicked=clicked, MCQ=MCQs[int(picked)-1])
@@ -99,8 +125,7 @@ def teacher():
         picked = request.form.get('F_choice')
         setActive(picked)
         resetCount()
-        with open("./db/ip.txt", 'r+') as file:
-            file.truncate(0)
+        resetIP()
         return redirect('/')
     elif request.method == 'POST' and request.form.get("F_changepassword") == "newPassword":
         return redirect('/change_password')
@@ -162,8 +187,8 @@ def a1cab29b4cf80d9be311041efbbd0a44184e7328b962cfbab0f7aa9a357787ca():
 
 @app.route("/projector")
 def projector():
-    file = open('./db/answers.txt', 'r')
-    return render_template("projector.html", list_ans=file.readlines())
+    count = getCount()
+    return render_template("projector.html", list_ans=count)
 
 
 @app.route("/admin", methods=['POST', 'GET'])
