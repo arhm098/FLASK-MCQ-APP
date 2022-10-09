@@ -93,10 +93,14 @@ def getIP():
         ips.append(row[0])
     return ips
 
-@app.route("/update_count",methods=['POST'])
-def update_count(choice):
-    new_counts = getCount()
-    return jsonify('',render_template('update_count.html',list_ans=new_counts))
+
+@app.route("/update_count", methods=['GET'])
+def update_count():
+    if request.method == "GET":
+        new_counts = getCount()
+        return render_template("update_count.html", list_ans=new_counts)
+    # return jsonify(new_counts)
+
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
