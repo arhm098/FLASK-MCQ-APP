@@ -1,7 +1,8 @@
 
 from http.client import REQUEST_ENTITY_TOO_LARGE
 from pydoc import render_doc
-from flask import Flask, render_template, request, redirect
+from turtle import update
+from flask import Flask, jsonify, render_template, request, redirect
 import sqlite3
 import hashlib
 
@@ -92,6 +93,10 @@ def getIP():
         ips.append(row[0])
     return ips
 
+@app.route("/update_count",methods=['POST'])
+def update_count(choice):
+    new_counts = getCount()
+    return jsonify('',render_template('update_count.html',list_ans=new_counts))
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -110,7 +115,8 @@ def index():
         correct = 0
         if answered_c == MCQs[int(picked)-1][6]:
             correct = 1
-        updateCount(int(answered))
+        if request.remote_addr not in banned_ips:
+            updateCount(int(answered))
         # ip banning
         ip_address = request.remote_addr
         addIP(ip_address)

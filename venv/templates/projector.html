@@ -1,23 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projector</title>
 </head>
 <body>
-    <div>
-        <span>first choice count :   </span><span>{{list_ans[0]}}</span>
+    <script>
+        $(function()
+        {
+            window.interval(function()
+            {get_count()},1000)
+        
+            function get_count()
+            {
+                $.ajax
+                ({
+                url: "/update_count",
+                type: "POST",
+                dataType: "json",
+                success: function(data)
+                    {
+                        $(list_ans).replaceWith(data)
+                    }
+
+                });
+            }
+        });
+    </script>
+    <div id = 'new_count'>
+        {{list_ans}}
     </div>
-    <div>
-        <span>second choice count :  </span><span>{{list_ans[1]}}</span>
-    </div>
-    <div>
-        <span>third choice count :   </span><span>{{list_ans[2]}}</span>
-    </div>
-    <div>
-        <span>fourth choice count :  </span><span>{{list_ans[3]}}</span>
-    </div>
-</body>
+        <div>
+            <span>first choice count :   </span><span>{{list_ans[0]}}</span>
+        </div>
+        <div>
+            <span>second choice count :  </span><span>{{list_ans[1]}}</span>
+        </div>
+        <div>
+            <span>third choice count :   </span><span>{{list_ans[2]}}</span>
+        </div>
+        <div>
+            <span>fourth choice count :  </span><span>{{list_ans[3]}}</span>
+        </div>
+    </body>
 </html>

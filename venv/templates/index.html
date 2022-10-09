@@ -58,8 +58,8 @@
     </section>
   </form>
   <div>
-      <span>You clicked          : </span><img src={{answer}} alt="not available">
-      <span>the right answer was : </span><img src={{MCQ[6]}} alt="not available">
+      <span>You clicked          : </span><div>{{answer}}</div>
+      <span>the right answer was : </span><div>{{MCQ[6]}}</div>
    </div>
       {% if correct == 1 %}
       <h1>You got the right answer!</h1>
