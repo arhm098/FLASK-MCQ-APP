@@ -13,12 +13,6 @@ MCQs = []
 picked = 0
 for row in cursor:
     MCQs.append(row)
-    print(row)
-
-app = Flask(__name__)
-
-# Helper Functions
-
 
 def setActive(picked):
     query = f"""UPDATE QUIZ
@@ -92,6 +86,14 @@ def getIP():
     for row in cursor:
         ips.append(row[0])
     return ips
+print("here it should erase IP")
+resetIP()
+print("IP shound be erased")
+app = Flask(__name__)
+
+# Helper Functions
+
+
 
 
 @app.route("/update_count", methods=['GET'])
@@ -113,6 +115,8 @@ def index():
 
     if request.method == 'POST':
         answered = request.form.get("F_answer")
+        if request.form.get("F_answer") == None:
+            answered = '1'
         map = {'1': MCQs[int(picked)-1][2], '2': MCQs[int(picked)-1][3],
                '3': MCQs[int(picked)-1][4], '4': MCQs[int(picked)-1][5]}
         answered_c = map[answered]
