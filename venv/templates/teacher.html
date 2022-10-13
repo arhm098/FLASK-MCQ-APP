@@ -7,6 +7,28 @@
     <title>teacher</title>
 </head>
 <body>
+    <form action = "{{url_for('teacher') }}" method="post">
+
+        <label for="Question">enter MCQ question</label>
+        <input type="text" name="F_Question" id="Question" />
+
+        <label for="choice1">enter MCQ choice 1</label>
+        <input type="text" name="F_choice1" id="choice1" />
+
+        <label for="choice2">enter MCQ choice 2</label>
+        <input type="text" name="F_choice2" id="choice2" />
+
+        <label for="choice3">enter MCQ choice 3</label>
+        <input type="text" name="F_choice3" id="choice3" />
+
+        <label for="choice4">enter MCQ choice 4</label>
+        <input type="text" name="F_choice4" id="choice4" />
+
+        <label for="answer">enter MCQ answer</label>
+        <input type="text" name="F_answer" id="answer" />
+
+        <button type="submit">ADD</button>
+    </form>
     <form action="{{ url_for('teacher') }}" method="post">
     {% for MCQ in MCQs %}
         <h3>{{MCQ[0]}}</h3>
@@ -40,9 +62,13 @@
 </form>
 
 <div>
-    <input type="submit" name="F_changepassword" value="newPassword"/>
+    <input type="submit" name="F_changepassword" value="new password"/>
 </div>
 
+
+<div>
+    <input type="submit" name="F_eraseMCQs" value="remove all mcqs"/>
+</div>
 
 
 </body>

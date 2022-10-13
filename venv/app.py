@@ -5,14 +5,38 @@ from turtle import update
 from flask import Flask, jsonify, render_template, request, redirect
 import sqlite3
 import hashlib
-
 db = sqlite3.connect('./db/test.db', check_same_thread=False)
-test = f"""SELECT * FROM QUIZ"""
-cursor = db.execute(test)
-MCQs = []
-picked = 0
-for row in cursor:
-    MCQs.append(row)
+
+def eraseMCQ():
+    test = f"""DROP TABLE QUIZ"""
+    db.execute(test)
+    db.commit()
+    creation_query_quiz = f"""CREATE TABLE QUIZ
+        (ID INTEGER PRIMARY KEY,
+        QUESTION TEXT NOT NULL,
+        OPTION1 TEXT NOT NULL,
+        OPTION2 TEXT NOT NULL,
+        OPTION3 TEXT NOT NULL,
+        OPTION4 TEXT NOT NULL,
+        CORRECT_ANSWER TEXT NOT NULL,
+        STATUS TEXT NOT NULL)"""
+    db.execute(creation_query_quiz)
+    db.commit()
+
+def fetchMCQ():
+    MCQs = []
+    test = f"""SELECT * FROM QUIZ"""
+    cursor = db.execute(test)
+    for row in cursor:
+        MCQs.append(row)
+    return MCQs
+
+def addMCQ(question, option1,option2, option3, option4, correct):
+    insertion_query = f"""INSERT INTO QUIZ(QUESTION, OPTION1, OPTION2, OPTION3, OPTION4, CORRECT_ANSWER, STATUS) 
+    VALUES(?, ?, ?, ?, ?, ?, ?)"""
+    db.execute(insertion_query, (question, option1,
+    option2, option3, option4, correct, "Inactive"))
+    db.commit()
 
 def setActive(picked):
     query = f"""UPDATE QUIZ
@@ -29,15 +53,12 @@ def setActive(picked):
 
 
 def getActive():
-    query = f"""SELECT ID 
-    FROM QUIZ
-    WHERE STATUS = "Active";
-    """
-    cursor = db.execute(query)
+    picked = []
+    test = f"""SELECT * FROM QUIZ"""
+    cursor = db.execute(test)
     for row in cursor:
-        picked = row[0]
+        picked.append(row)
     return picked
-
 
 def getCount():
     query = f"""SELECT * FROM COUNT;"""
@@ -86,9 +107,9 @@ def getIP():
     for row in cursor:
         ips.append(row[0])
     return ips
-print("here it should erase IP")
+
 resetIP()
-print("IP shound be erased")
+
 app = Flask(__name__)
 
 # Helper Functions
@@ -106,22 +127,21 @@ def update_count():
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    correct = 0
     picked = getActive()
+    picked = picked[0]
+    map = {'1': picked[2], '2': picked[3],'3': picked[4], '4': picked[5]}
     clicked = '1'
     banned_ips = getIP()
-
     if request.remote_addr not in banned_ips:
         clicked = '0'
-
     if request.method == 'POST':
         answered = request.form.get("F_answer")
         if request.form.get("F_answer") == None:
             answered = '1'
-        map = {'1': MCQs[int(picked)-1][2], '2': MCQs[int(picked)-1][3],
-               '3': MCQs[int(picked)-1][4], '4': MCQs[int(picked)-1][5]}
+        print(map)
         answered_c = map[answered]
-        correct = 0
-        if answered_c == MCQs[int(picked)-1][6]:
+        if answered_c == picked[6]:
             correct = 1
         if request.remote_addr not in banned_ips:
             updateCount(int(answered))
@@ -129,21 +149,31 @@ def index():
         ip_address = request.remote_addr
         addIP(ip_address)
         #######
-        return render_template("index.html", clicked='1', MCQ=MCQs[int(picked)-1], correct=correct, answer=answered_c)
-    return render_template("index.html", clicked=clicked, MCQ=MCQs[int(picked)-1])
+        return render_template("index.html", clicked='1', MCQ=picked, correct=correct, answer=answered_c)
+    return render_template("index.html", clicked=clicked, MCQ=picked)
 
 
 @app.route("/teacher", methods=['GET', 'POST'])
 def teacher():
     if request.method == 'POST' and request.form.get('F_choice') != None:
-        picked = request.form.get('F_choice')
-        setActive(picked)
+        choice = request.form.get('F_choice')
+        setActive(choice)
         resetCount()
         resetIP()
         return redirect('/')
-    elif request.method == 'POST' and request.form.get("F_changepassword") == "newPassword":
+    elif request.method == 'POST' and request.form.get("F_changepassword") == "new password":
         return redirect('/change_password')
-    return render_template("teacher.html", MCQs=MCQs)
+    elif request.method == 'POST' and request.form.get("F_Question") != None and request.form.get("F_choice1") != None:
+        question = request.form.get("F_Question")
+        choice1 = request.form.get("F_choice1")
+        choice2 = request.form.get("F_choice2")
+        choice3 = request.form.get("F_choice3")
+        choice4 = request.form.get("F_choice4")
+        answer = request.form.get("F_answer")
+        addMCQ(question, choice1,choice2, choice3, choice4, answer)
+    elif request.method == 'POST' and request.form.get("F_eraseMCQs") == "remove all mcqs":
+        eraseMCQ()
+    return render_template("teacher.html", MCQs=fetchMCQ())
 
 
 @app.route("/password", methods=['GET', 'POST'])
@@ -155,7 +185,7 @@ def password():
         file = open('./db/SUPERSPECIALHASHKEY.txt', 'r')
         pasword = file.read()
         if hash == pasword:
-            return render_template("teacher.html", MCQs=MCQs)
+            return render_template("teacher.html", MCQs=fetchMCQ())
         else:
             return redirect("wrong_password")
     return render_template("password.html")
@@ -164,7 +194,6 @@ def password():
 @app.route("/wrong_password", methods=['GET', 'POST'])
 def wrong_password():
     if request.method == 'POST':
-        print("redirecting")
         return redirect('/')
     return render_template("wrong_password.html")
 
