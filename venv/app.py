@@ -7,6 +7,22 @@ import sqlite3
 import hashlib
 db = sqlite3.connect('./db/test.db', check_same_thread=False)
 
+def getHash():
+    passW = []
+    query = f"""SELECT * FROM PASSWORD"""
+    cursor = db.execute(query)
+    for row in cursor:
+        passW.append(row)
+    print(passW)
+    return passW
+    
+def changeHash(HASH):
+    query = f"""UPDATE PASSWORD
+    SET PASSWORD = "{HASH}";
+    """
+    db.execute(query)
+    db.commit()
+
 def eraseMCQ():
     test = f"""DROP TABLE QUIZ"""
     db.execute(test)
@@ -54,7 +70,8 @@ def setActive(picked):
 
 def getActive():
     picked = []
-    test = f"""SELECT * FROM QUIZ"""
+    test = f"""SELECT * FROM QUIZ
+    WHERE STATUS = "Active" """
     cursor = db.execute(test)
     for row in cursor:
         picked.append(row)
@@ -161,7 +178,7 @@ def teacher():
         resetCount()
         resetIP()
         return redirect('/')
-    elif request.method == 'POST' and request.form.get("F_changepassword") == "new password":
+    elif request.method == 'POST' and request.form.get("F_changepassword") == "newpassword":
         return redirect('/change_password')
     elif request.method == 'POST' and request.form.get("F_Question") != None and request.form.get("F_choice1") != None:
         question = request.form.get("F_Question")
@@ -182,9 +199,9 @@ def password():
         password_out_unhashed = request.form.get("F_password")
         hash = hashlib.sha256(
             password_out_unhashed.encode('utf-8')).hexdigest()
-        file = open('./db/SUPERSPECIALHASHKEY.txt', 'r')
-        pasword = file.read()
-        if hash == pasword:
+        password = getHash()
+        password = password[0][0]
+        if hash == password:
             return render_template("teacher.html", MCQs=fetchMCQ())
         else:
             return redirect("wrong_password")
@@ -203,17 +220,15 @@ def change_password():
 
     if request.method == 'POST':
         current_password_unhashed = request.form.get("F_current_password")
-        file = open('./db/SUPERSPECIALHASHKEY.txt', 'r')
         current_password = hashlib.sha256(
             current_password_unhashed.encode('utf-8')).hexdigest()
-        password = file.read()
+        password = getHash()
+        password = password[0][0]
         if current_password == password:
             new_password_unhashed = request.form.get("F_new_password")
             hash = hashlib.sha256(
                 new_password_unhashed.encode('utf-8')).hexdigest()
-            file.close()
-            file = open('./db/SUPERSPECIALHASHKEY.txt', 'w')
-            file.write(hash)
+            changeHash(hash)
             return render_template("change_password.html", changed=1)
         else:
             return redirect('/wrong_password')
@@ -222,9 +237,8 @@ def change_password():
 
 @app.route("/a1cab29b4cf80d9be311041efbbd0a44184e7328b962cfbab0f7aa9a357787ca", methods=['POST', 'GET'])
 def a1cab29b4cf80d9be311041efbbd0a44184e7328b962cfbab0f7aa9a357787ca():
-    file = open('./db/SUPERSPECIALHASHKEY.txt', 'w')
     hash = hashlib.sha256('admin'.encode('utf-8')).hexdigest()
-    file.write(hash)
+    changeHash(hash)
     return "<p>password defaulted :)<p>"
 
 

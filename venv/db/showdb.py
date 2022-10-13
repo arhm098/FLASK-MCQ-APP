@@ -9,7 +9,7 @@ print(os.getcwd())
 db = sqlite3.connect(os.getcwd()+'/test.db')
 print("Database Connected Sucessfully!")
 
-test = f"""SELECT * FROM QUIZ"""
+test = f"""SELECT * FROM PASSWORD"""
 cursor = db.execute(test)
 MCQs = []
 picked = 0

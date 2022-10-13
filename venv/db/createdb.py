@@ -33,9 +33,15 @@ count_initialize = f"""INSERT INTO COUNT(OPTION1, OPTION2, OPTION3, OPTION4)
 VALUES(0,0,0,0)
     """
 
+creation_password = f"""CREATE TABLE PASSWORD
+(PASSWORD TEXT PRIMARY KEY)"""
+password_intialize = f"""INSERT INTO PASSWORD(PASSWORD)
+VALUES('8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918')"""
 db.execute(creation_query_quiz)
 db.execute(creation_query_count)
 db.execute(creation_query_ip)
+db.execute(creation_password)
+db.execute(password_intialize)
 print("Tables Created!")
 
 db.execute(count_initialize)
