@@ -190,7 +190,7 @@ def teacher():
         addMCQ(question, choice1,choice2, choice3, choice4, answer)
     elif request.method == 'POST' and request.form.get("F_eraseMCQs") == "remove all mcqs":
         eraseMCQ()
-    return render_template("teacher.html", MCQs=fetchMCQ())
+    return render_template("teacher.html", MCQs=fetchMCQ(), auth = '0')
 
 
 @app.route("/password", methods=['GET', 'POST'])
@@ -202,7 +202,7 @@ def password():
         password = getHash()
         password = password[0][0]
         if hash == password:
-            return render_template("teacher.html", MCQs=fetchMCQ())
+            return render_template("teacher.html", MCQs=fetchMCQ(), auth = '1')
         else:
             return redirect("wrong_password")
     return render_template("password.html")
