@@ -1,7 +1,5 @@
 
 from http.client import REQUEST_ENTITY_TOO_LARGE
-from pydoc import render_doc
-from turtle import update
 from flask import Flask, jsonify, render_template, request, redirect
 import sqlite3
 import hashlib
@@ -188,6 +186,7 @@ def teacher():
         choice4 = request.form.get("F_choice4")
         answer = request.form.get("F_answer")
         addMCQ(question, choice1,choice2, choice3, choice4, answer)
+        return render_template("teacher.html", MCQs=fetchMCQ(), auth = '1')
     elif request.method == 'POST' and request.form.get("F_eraseMCQs") == "remove all mcqs":
         eraseMCQ()
     return render_template("teacher.html", MCQs=fetchMCQ(), auth = '0')

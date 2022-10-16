@@ -1,8 +1,8 @@
-# start by pulling the python image
-FROM python:3.10
+FROM python:3.7-alpine
 
+# RUN apt-get -y install python3-pip
+# # copy the requirements file into the image
 
-# copy the requirements file into the image
 COPY /requirements.txt /requirements.txt
 
 # install the dependencies and packages in the requirements file
@@ -13,7 +13,6 @@ COPY . .
 # switch working directory
 WORKDIR /venv
 
-RUN ls
 
 # copy every content from the local file to the image
 
