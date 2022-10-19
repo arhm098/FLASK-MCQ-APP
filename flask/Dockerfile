@@ -6,8 +6,14 @@ FROM python:3.7-alpine
 COPY /requirements.txt /requirements.txt
 
 # install the dependencies and packages in the requirements file
-RUN pip install -r requirements.txt
-
+RUN set -e; \
+	apk add --no-cache --virtual .build-deps \
+		gcc \
+		libc-dev \
+		linux-headers \
+	; \
+	pip install -r requirements.txt; \
+	apk del .build-deps;
 COPY . .
 
 # switch working directory
@@ -16,6 +22,5 @@ WORKDIR /venv
 
 # copy every content from the local file to the image
 
-EXPOSE 5000
 
-CMD ["python","app.py"]
+CMD ["uwsgi","app.ini"]
