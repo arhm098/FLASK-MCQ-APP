@@ -6,8 +6,6 @@ services:
     build: ./flask
     container_name: flask
     restart: always
-    environment:
-      - APP_NAME=MCQ_APP
     expose:
       - 8080
 

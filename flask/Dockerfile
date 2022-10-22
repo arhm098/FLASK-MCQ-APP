@@ -21,6 +21,4 @@ WORKDIR /venv
 
 
 # copy every content from the local file to the image
-
-
 CMD ["uwsgi","app.ini"]
